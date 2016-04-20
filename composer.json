@@ -1,0 +1,27 @@
+{
+    "name": "thanpa/paycenter-bundle",
+    "type": "symfony-bundle",
+    "description": "Piraeus bank paycenter bundle",
+    "keywords": ["Thanpa", "Piraeus", "Piraeus bank", "Paycenter"],
+    "homepage": "https://github.com/thanpa/PaycenterBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thanasis Papapanagiotou",
+            "email": "hello@thanpa.com"
+        },
+        {
+            "name": "Community contributors",
+            "homepage": "https://github.com/thanpa/PaycenterBundle/network/members"
+        }
+    ],
+    "minimum-stability": "dev",
+    "support" : {
+        "source": "https://github.com/thanpa/PaycenterBundle",
+        "issues": "https://github.com/thanpa/PaycenterBundle/issues"
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "symfony/framework-bundle": "~2.3|~3.0"
+    }
+}
