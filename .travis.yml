@@ -10,7 +10,18 @@ matrix:
     allow_failures:
         - php: hhvm
 
-before_script: composer install --dev --prefer-source
+before_script:
+   - composer self-update
+   - if [ -n "$GITHUB_TOKEN" ]; then composer config github-oauth.github.com ${GITHUB_TOKEN}; fi;
+   - composer install --prefer-dist -o
+
+## Run on container environment
+sudo: false
+
+## Cache composer bits
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 notifications:
   email: giorgos.gkirtsou@thanpa.com
