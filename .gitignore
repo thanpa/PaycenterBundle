@@ -10,4 +10,8 @@
 # PhpStorm
 /.idea/
 
-./build
+build/
+vendor/
+composer.lock
+phpunit.xml
+composer.phar
