@@ -9,3 +9,5 @@
 
 # PhpStorm
 /.idea/
+
+./build
