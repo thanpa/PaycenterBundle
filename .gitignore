@@ -1,0 +1,11 @@
+# Eclipse
+/.settings/
+/.buildpath
+/.project
+/cache.properties
+
+# NetBeans
+/nbproject/
+
+# PhpStorm
+/.idea/
