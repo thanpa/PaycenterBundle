@@ -4,4 +4,22 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="thanpa_paycenter.ticket_issuer_url">https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx</parameter>
+    </parameters>
+
+    <services>
+        <service id="thanpa_paycenter.ticket_issuer" class="Thanpa\PaycenterBundle\Service\TicketIssuer">
+            <argument type="service" id="thanpa_paycenter.guzzle_client" />
+            <argument>%thanpa_paycenter.acquirerId%</argument>
+            <argument>%thanpa_paycenter.merchantId%</argument>
+            <argument>%thanpa_paycenter.posId%</argument>
+            <argument>%thanpa_paycenter.username%</argument>
+            <argument>%thanpa_paycenter.password%</argument>
+            <argument>%thanpa_paycenter.ticket_issuer_url%</argument>
+        </service>
+
+        <service id="thanpa_paycenter.guzzle_client" class="\GuzzleHttp\Client" />
+    </services>
+
 </container>

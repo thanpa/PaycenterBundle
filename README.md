@@ -49,3 +49,18 @@ class AppKernel extends Kernel
     // ...
 }
 ```
+
+Configuration
+-------------
+
+App following to your ```app/config/parameters.yml``` and replace placeholder values to the ones provided by your bank.
+
+```
+    # paycenter parameters
+    thanpa_paycenter.acquirerId: placeholder-value-change-me
+    thanpa_paycenter.merchantId: placeholder-value-change-me
+    thanpa_paycenter.posId: placeholder-value-change-me
+    thanpa_paycenter.username: placeholder-value-change-me
+    thanpa_paycenter.password: placeholder-value-change-me
+
+```

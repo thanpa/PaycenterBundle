@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+ <soap12:Body>
+  <IssueNewTicket xmlns="http://piraeusbank.gr/paycenter/redirection">
+   <Request>
+    <Username>string</Username>
+    <Password>b45cffe084dd3d20d928bee85e7b0f21</Password>
+    <MerchantId>int</MerchantId>
+    <PosId>int</PosId>
+    <AcquirerId>int</AcquirerId>
+    <MerchantReference>string</MerchantReference>
+    <RequestType>string</RequestType>
+    <ExpirePreauth>unsignedByte</ExpirePreauth>
+    <Amount>decimal</Amount>
+    <CurrencyCode>int</CurrencyCode>
+    <Installments>unsignedByte</Installments>
+    <Bnpl>unsignedByte</Bnpl>
+    <Parameters>string</Parameters>
+   </Request>
+  </IssueNewTicket>
+ </soap12:Body>
+</soap12:Envelope>
