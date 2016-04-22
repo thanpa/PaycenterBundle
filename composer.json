@@ -21,7 +21,7 @@
     "issues": "https://github.com/thanpa/PaycenterBundle/issues"
   },
   "require": {
-    "php": ">=5.4.0",
+    "php": ">=5.5.0",
     "symfony/framework-bundle": "~2.3|~3.0",
     "guzzlehttp/guzzle": "^6.2"
   },
