@@ -7,6 +7,8 @@
     <parameters>
         <parameter key="thanpa_paycenter.ticket_issuer_url">https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx</parameter>
         <parameter key="thanpa_paycenter.ticket_issuer_class">Thanpa\PaycenterBundle\Service\TicketIssuer</parameter>
+        <parameter key="thanpa_paycenter.redirection_pay_controller">Thanpa\PaycenterBundle\Controller\RedirectionPayController</parameter>
+        <parameter key="thanpa_paycenter.redirection_pay_url">https://paycenter.piraeusbank.gr/redirection/pay.aspx</parameter>
     </parameters>
 
     <services>
@@ -20,7 +22,9 @@
             <argument>%thanpa_paycenter.ticket_issuer_url%</argument>
         </service>
 
-        <service id="thanpa_paycenter.guzzle_client" class="\GuzzleHttp\Client" />
+        <service id="thanpa_paycenter.guzzle_client" class="GuzzleHttp\Client" />
+
+        <service id="thanpa_paycenter.redirection_pay_controller" class="%thanpa_paycenter.redirection_pay_controller%" />
     </services>
 
 </container>
