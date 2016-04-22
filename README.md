@@ -62,8 +62,30 @@ App following to your ```app/config/parameters.yml``` and replace placeholder va
     thanpa_paycenter.posId: placeholder-value-change-me
     thanpa_paycenter.username: placeholder-value-change-me
     thanpa_paycenter.password: placeholder-value-change-me
+    thanpa_paycenter.cancelLink: homepage # make sure to choose a route that does not require parameters
 
 ```
+
+Add following code to your ```app/config/routing.yml```:
+
+```
+redirectToBank:
+    path:      /order/redirectToBank/{languageCode}/{merchantReference}
+    defaults:  { _controller: ThanpaPaycenterBundle:RedirectionPay:redirectToBank, languageCode: 'el-GR', merchantReference: '' }
+    requirements:
+        languageCode:  el-GR|en-US|ru-RU|de-DE
+```
+
+**NOTE:** Redirect to bank requires javascript to be enabled on client's browser.
+
+Bank supports following ```languageCode``` values:
+* el-GR
+* en-US
+* ru-RU
+* de-DE
+
+## Parameters:
+* thanpa_paycenter.cancelLink: enter route name to redirect user if cancel link is clicked on bank's site.
 
 How to run tests
 ----------------
