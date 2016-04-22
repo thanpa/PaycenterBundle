@@ -3,7 +3,6 @@
 namespace Thanpa\PaycenterBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Thanpa\PaycenterBundle\Model\RedirectionPay;
 
 /**
@@ -21,8 +20,6 @@ class RedirectionPayController extends Controller
      */
     public function redirectToBankAction($languageCode, $merchantReference)
     {
-        $cancelRouteName = $this->getParameter('thanpa_paycenter.cancelLink');
-
         $redirectionPay = new RedirectionPay();
         $redirectionPay
             ->setAcquirerId($this->getParameter('thanpa_paycenter.acquirerId'))
@@ -31,7 +28,7 @@ class RedirectionPayController extends Controller
             ->setUser($this->getParameter('thanpa_paycenter.username'))
             ->setLanguageCode($languageCode)
             ->setMerchantReference($merchantReference)
-            ->setParamBackLink($this->generateUrl($cancelRouteName, [], UrlGeneratorInterface::ABSOLUTE_URL));
+            ->setParamBackLink($this->getParameter('thanpa_paycenter.param_back_link'));
 
         $form = $this->createForm('Thanpa\\PaycenterBundle\\Form\\Type\\RedirectionPayType', $redirectionPay, [
             'action' => $this->getParameter('thanpa_paycenter.redirection_pay_url'),

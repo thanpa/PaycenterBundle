@@ -181,10 +181,15 @@ class RedirectionPay
      * Set Param Back Link
      *
      * @param string $ParamBackLink Param Back Link
+     * @throws \Exception if ? character is passed in $ParamBackLink
      * @return RedirectionPay
      */
     public function setParamBackLink($ParamBackLink)
     {
+        if (strstr($ParamBackLink, '?')) {
+            throw new \Exception('ParamBackLink should not have a ? character.');
+        }
+
         $this->ParamBackLink = $ParamBackLink;
 
         return $this;
