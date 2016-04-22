@@ -62,7 +62,7 @@ App following to your ```app/config/parameters.yml``` and replace placeholder va
     thanpa_paycenter.posId: placeholder-value-change-me
     thanpa_paycenter.username: placeholder-value-change-me
     thanpa_paycenter.password: placeholder-value-change-me
-    thanpa_paycenter.cancelLink: homepage # make sure to choose a route that does not require parameters
+    thanpa_paycenter.param_back_link: "" # its contents used as a query string in the URL returned to the user when the "Cancel" button is pressed.
 
 ```
 
@@ -85,7 +85,7 @@ Bank supports following ```languageCode``` values:
 * de-DE
 
 ## Parameters:
-* thanpa_paycenter.cancelLink: enter route name to redirect user if cancel link is clicked on bank's site.
+* thanpa_paycenter.param_back_link: use "" for no parameters, or add your parameters: ```p1=v1&p2=v2```. Make sure not to include ? as first character.
 
 How to run tests
 ----------------
