@@ -6,10 +6,11 @@
 
     <parameters>
         <parameter key="thanpa_paycenter.ticket_issuer_url">https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx</parameter>
+        <parameter key="thanpa_paycenter.ticket_issuer_class">Thanpa\PaycenterBundle\Service\TicketIssuer</parameter>
     </parameters>
 
     <services>
-        <service id="thanpa_paycenter.ticket_issuer" class="Thanpa\PaycenterBundle\Service\TicketIssuer">
+        <service id="thanpa_paycenter.ticket_issuer" class="%thanpa_paycenter.ticket_issuer_class%">
             <argument type="service" id="thanpa_paycenter.guzzle_client" />
             <argument>%thanpa_paycenter.acquirerId%</argument>
             <argument>%thanpa_paycenter.merchantId%</argument>
