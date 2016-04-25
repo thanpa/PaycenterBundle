@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirect to secure environment</title>
+</head>
+<body>
+{{ form_start(form, {'attr': {'id': 'form'}}) }}
+<input type="submit" name="form" value="Submit" />
+{{ form_end(form) }}
+
+<script type="text/javascript">
+    document.getElementById("form").submit();
+</script>
+
+</body>
+</html>
