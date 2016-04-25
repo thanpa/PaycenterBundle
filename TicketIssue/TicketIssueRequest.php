@@ -2,8 +2,6 @@
 
 namespace Thanpa\PaycenterBundle\TicketIssue;
 
-use Thanpa\PaycenterBundle\Service\TicketIssuer;
-
 /**
  * Class TicketIssueRequest
  * @package Thanpa\PaycenterBundle\TicketIssue
@@ -13,10 +11,10 @@ class TicketIssueRequest
     /**
      * Builds XML needed for request to bank's SOAP Web Service
      *
-     * @param TicketIssuer $issuer Ticket Issuer object
+     * @param array $fields Array containing field names and values to create Xml Fields
      * @return string
      */
-    public static function getBody(TicketIssuer $issuer)
+    public static function getBody(array $fields)
     {
         $writer = new \XMLWriter();
         $writer->openMemory();
@@ -34,23 +32,6 @@ class TicketIssueRequest
         $writer->writeAttribute('xmlns', 'http://piraeusbank.gr/paycenter/redirection');
 
         $writer->startElement('Request');
-
-        $fields = [
-            'Username' => $issuer->getUsername(),
-            'Password' => $issuer->getPassword(),
-            'MerchantId' => $issuer->getMerchantId(),
-            'PosId' => $issuer->getPosId(),
-            'AcquirerId' => $issuer->getAcquirerId(),
-            'MerchantReference' => $issuer->getMerchantReference(),
-            'RequestType' => $issuer->getRequestType(),
-            'ExpirePreauth' => $issuer->getExpirePreAuth(),
-            'Amount' => $issuer->getAmount(),
-            'CurrencyCode' => $issuer->getCurrencyCode(),
-            'Installments' => $issuer->getInstallments(),
-            'Bnpl' => $issuer->getBnpl(),
-            'Parameters' => $issuer->getParameters(),
-        ];
-
         foreach ($fields as $field => $value) {
             $writer->startElement($field);
             $writer->text($value);

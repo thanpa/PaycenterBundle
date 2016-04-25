@@ -8,7 +8,7 @@ use Thanpa\PaycenterBundle\Interfaces\HashCalculatorInterface;
  * Class PiraeusHashCalculator
  * @package Thanpa\PaycenterBundle\Service
  */
-class PiraeusHashCalculator implements HashCalculatorInterface
+final class PiraeusHashCalculator implements HashCalculatorInterface
 {
     /** @var string */
     private $transactionTicket;
@@ -44,256 +44,43 @@ class PiraeusHashCalculator implements HashCalculatorInterface
     private $statusFlag;
 
     /**
-     * Get Status Flag
-     *
-     * @return string
-     */
-    public function getStatusFlag()
-    {
-        return $this->statusFlag;
-    }
-
-    /**
-     * Set Status Flag
-     *
-     * @param string $statusFlag Status Flag
-     * @return PiraeusHashCalculator
-     */
-    public function setStatusFlag($statusFlag)
-    {
-        $this->statusFlag = $statusFlag;
-
-        return $this;
-    }
-
-    /**
-     * Get Package No
-     *
-     * @return string
-     */
-    public function getPackageNo()
-    {
-        return $this->packageNo;
-    }
-
-    /**
-     * Set Package No
-     *
-     * @param string $packageNo Package No
-     * @return PiraeusHashCalculator
-     */
-    public function setPackageNo($packageNo)
-    {
-        $this->packageNo = $packageNo;
-
-        return $this;
-    }
-
-    /**
-     * Get auth status
-     *
-     * @return string
-     */
-    public function getAuthStatus()
-    {
-        return $this->authStatus;
-    }
-
-    /**
-     * Set Auth status
-     *
-     * @param string $authStatus Auth Status
-     * @return PiraeusHashCalculator
-     */
-    public function setAuthStatus($authStatus)
-    {
-        $this->authStatus = $authStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get support reference Id
-     *
-     * @return string
-     */
-    public function getSupportReferenceId()
-    {
-        return $this->supportReferenceId;
-    }
-
-    /**
-     * Set support Reference Id
-     *
+     * PiraeusHashCalculator constructor.
+     * @param string $transactionTicket  Transaction ticket
+     * @param int $posId                 Pos Id
+     * @param int $acquirerId            Acquirer Id
+     * @param string $merchantReference  Merchant Reference
+     * @param string $approvalCode       Approval Code
+     * @param string $parameters         Parameters
+     * @param string $responseCode       Response Code
      * @param string $supportReferenceId Support Reference Id
-     * @return PiraeusHashCalculator
+     * @param string $authStatus         Auth Status
+     * @param string $packageNo          Package No
+     * @param string $statusFlag         Status Flag
      */
-    public function setSupportReferenceId($supportReferenceId)
-    {
-        $this->supportReferenceId = $supportReferenceId;
-
-        return $this;
-    }
-
-    /**
-     * Get response code
-     *
-     * @return string
-     */
-    public function getResponseCode()
-    {
-        return $this->responseCode;
-    }
-
-    /**
-     * Set response code
-     *
-     * @param string $responseCode Response Code
-     * @return PiraeusHashCalculator
-     */
-    public function setResponseCode($responseCode)
-    {
-        $this->responseCode = $responseCode;
-
-        return $this;
-    }
-
-    /**
-     * Get parameters
-     *
-     * @return string
-     */
-    public function getParameters()
-    {
-        return $this->parameters;
-    }
-
-    /**
-     * Set Parameters
-     *
-     * @param string $parameters Parameters
-     * @return PiraeusHashCalculator
-     */
-    public function setParameters($parameters)
-    {
-        $this->parameters = $parameters;
-
-        return $this;
-    }
-
-    /**
-     * Get approval code
-     *
-     * @return string
-     */
-    public function getApprovalCode()
-    {
-        return $this->approvalCode;
-    }
-
-    /**
-     * Set approval code
-     *
-     * @param string $approvalCode Approval code
-     * @return PiraeusHashCalculator
-     */
-    public function setApprovalCode($approvalCode)
-    {
-        $this->approvalCode = $approvalCode;
-
-        return $this;
-    }
-
-    /**
-     * Get merchant reference
-     *
-     * @return string
-     */
-    public function getMerchantReference()
-    {
-        return $this->merchantReference;
-    }
-
-    /**
-     * Set Merchant reference
-     *
-     * @param string $merchantReference Merchant Reference
-     * @return PiraeusHashCalculator
-     */
-    public function setMerchantReference($merchantReference)
-    {
-        $this->merchantReference = $merchantReference;
-
-        return $this;
-    }
-
-    /**
-     * Get Acquirer Id
-     *
-     * @return string
-     */
-    public function getAcquirerId()
-    {
-        return $this->acquirerId;
-    }
-
-    /**
-     * Set Acquirer Id
-     *
-     * @param string $acquirerId Acquirer Id
-     * @return PiraeusHashCalculator
-     */
-    public function setAcquirerId($acquirerId)
-    {
-        $this->acquirerId = $acquirerId;
-
-        return $this;
-    }
-
-    /**
-     * Get Pos Id
-     *
-     * @return string
-     */
-    public function getPosId()
-    {
-        return $this->posId;
-    }
-
-    /**
-     * Set post id
-     *
-     * @param string $posId Pos Id
-     * @return PiraeusHashCalculator
-     */
-    public function setPosId($posId)
-    {
-        $this->posId = $posId;
-
-        return $this;
-    }
-
-    /**
-     * Get transaction ticket
-     *
-     * @return string
-     */
-    public function getTransactionTicket()
-    {
-        return $this->transactionTicket;
-    }
-
-    /**
-     * Set transaction ticket
-     *
-     * @param string $transactionTicket Transaction Ticket
-     * @return PiraeusHashCalculator
-     */
-    public function setTransactionTicket($transactionTicket)
+    public function __construct(
+        $transactionTicket,
+        $posId,
+        $acquirerId,
+        $merchantReference,
+        $approvalCode,
+        $parameters,
+        $responseCode,
+        $supportReferenceId,
+        $authStatus,
+        $packageNo,
+        $statusFlag)
     {
         $this->transactionTicket = $transactionTicket;
-
-        return $this;
+        $this->posId = $posId;
+        $this->acquirerId = $acquirerId;
+        $this->merchantReference = $merchantReference;
+        $this->approvalCode = $approvalCode;
+        $this->parameters = $parameters;
+        $this->responseCode = $responseCode;
+        $this->supportReferenceId = $supportReferenceId;
+        $this->authStatus = $authStatus;
+        $this->packageNo = $packageNo;
+        $this->statusFlag = $statusFlag;
     }
 
     /**

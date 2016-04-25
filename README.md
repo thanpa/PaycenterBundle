@@ -50,6 +50,21 @@ class AppKernel extends Kernel
 }
 ```
 
+Step 3: Update database
+-----------------------
+This bundle supports Doctrine, please run the following command:
+```
+# bin/console for Symfony3
+$ app/console doctrine:schema:update --force
+```
+
+If you're using [DoctrineMigrationsBundle](http://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html) run:
+```
+# bin/console for Symfony3
+$ app/console doctrine:migrations:diff
+$ app/console doctrine:migrations:migrate
+```
+
 Configuration
 -------------
 
