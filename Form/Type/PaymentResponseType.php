@@ -21,23 +21,23 @@ class PaymentResponseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('supportReferenceId')
-            ->add('resultCode')
-            ->add('resultDescription')
-            ->add('statusFlag')
-            ->add('responseCode')
-            ->add('responseDescription')
-            ->add('languageCode')
-            ->add('merchantReference')
-            ->add('transactionDateTime')
-            ->add('transactionId')
-            ->add('cardType')
-            ->add('packageNo')
-            ->add('approvalCode')
-            ->add('retrievalRef')
-            ->add('authStatus')
-            ->add('parameters')
-            ->add('hashKey');
+            ->add('SupportReferenceId')
+            ->add('ResultCode')
+            ->add('ResultDescription')
+            ->add('StatusFlag')
+            ->add('ResponseCode')
+            ->add('ResponseDescription')
+            ->add('LanguageCode')
+            ->add('MerchantReference')
+            ->add('TransactionDateTime')
+            ->add('TransactionId')
+            ->add('CardType')
+            ->add('PackageNo')
+            ->add('ApprovalCode')
+            ->add('RetrievalRef')
+            ->add('AuthStatus')
+            ->add('Parameters')
+            ->add('HashKey');
     }
 
     /**

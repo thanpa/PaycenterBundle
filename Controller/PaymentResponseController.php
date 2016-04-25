@@ -3,7 +3,7 @@
 namespace Thanpa\PaycenterBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Thanpa\PaycenterBundle\Form\Type\PaymentResponseType;
 
 /**
@@ -25,16 +25,13 @@ class PaymentResponseController extends Controller
     /**
      * Converts POST'ed data to PaymentResponse object.
      *
-     * @param RequestStack $requestStack Request Stack
      * @return \Thanpa\PaycenterBundle\Model\PaymentResponse
      * @throws \Exception if form has errors or hash key is invalid
      */
-    protected function convertPostToPaymentResponse(RequestStack $requestStack)
+    protected function convertPostToPaymentResponse()
     {
-        $request = $requestStack->getCurrentRequest();
-
         $form = $this->createForm(PaymentResponseType::class);
-        $form->handleRequest($request);
+        $form->submit($_POST);
 
         if ($form->isValid() && $form->isSubmitted()) {
             return $form->getData();

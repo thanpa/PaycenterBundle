@@ -70,19 +70,19 @@ class ValidHashKeyValidator extends ConstraintValidator
      * Get transaction ticket by merchant reference
      *
      * @param string $merchantReference Merchant Reference
-     * @return \Thanpa\PaycenterBundle\Entity\TransactionTicket
+     * @return string Transaction Ticket
      * @throws \Exception if transaction ticket is not found
      */
     private function getTransactionTicketByMerchantReference($merchantReference)
     {
-        $transactionTicket = $this->manager
+        $result = $this->manager
             ->getRepository('ThanpaPaycenterBundle:TransactionTicket')
             ->findOneBy(['merchantReference' => $merchantReference]);
 
-        if ($transactionTicket === null) {
+        if ($result === null) {
             throw new \Exception('TransactionTicket not found in database for this request.');
         }
 
-        return $transactionTicket;
+        return $result->getTransactionTicket();
     }
 }
