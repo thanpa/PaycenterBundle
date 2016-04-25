@@ -39,6 +39,11 @@ class TicketIssuerTest extends \PHPUnit_Framework_TestCase
         $handler2 = HandlerStack::create($mock2);
         $client2 = new Client(['handler' => $handler2]);
 
+        $entityManager = $this->getMockBuilder('\\Doctrine\\ORM\\EntityManager')
+            ->disableOriginalConstructor()
+            ->setMethods(['persist', 'flush'])
+            ->getMock();
+
         $this->class = new TicketIssuer(
             $client,
             '1',
@@ -46,7 +51,8 @@ class TicketIssuerTest extends \PHPUnit_Framework_TestCase
             '3',
             'username',
             'password',
-            'https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx'
+            'https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx',
+            $entityManager
         );
 
         $this->class2 = new TicketIssuer(
@@ -56,7 +62,8 @@ class TicketIssuerTest extends \PHPUnit_Framework_TestCase
             '3',
             'username',
             'password',
-            'https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx'
+            'https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx',
+            $entityManager
         );
     }
 
@@ -66,12 +73,32 @@ class TicketIssuerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTicketMethodResultCodeNotZero()
     {
+        $this->class->setMerchantReference('123456');
         $this->class->getTicket();
     }
 
     public function testGetTicketMethodSuccessResult()
     {
+        $this->class2->setMerchantReference('12345');
         $this->assertEquals('1234567890', $this->class2->getTicket());
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage MerchantReference is required for TicketIssuer
+     * @throws \Exception
+     */
+    public function testGetTicketNoMerchantReference()
+    {
+        $this->class2
+            ->setRequestType('01')
+            ->setCurrencyCode('978')
+            ->setAmount(100)
+            ->setInstallments(0)
+            ->setExpirePreAuth(0)
+            ->setParameters('')
+            ->setMerchantReference(null);
+        $this->class2->getTicket();
     }
 
     /**

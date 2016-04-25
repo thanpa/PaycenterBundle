@@ -20,6 +20,7 @@
             <argument>%thanpa_paycenter.username%</argument>
             <argument>%thanpa_paycenter.password%</argument>
             <argument>%thanpa_paycenter.ticket_issuer_url%</argument>
+            <argument type="service" id="doctrine.orm.entity_manager" />
         </service>
 
         <service id="thanpa_paycenter.guzzle_client" class="GuzzleHttp\Client" />
@@ -29,6 +30,7 @@
         <service id="thanpa_paycenter.validator_hash_key" class="Thanpa\PaycenterBundle\Validator\Constraints\ValidHashKeyValidator">
             <argument>%thanpa_paycenter.posId%</argument>
             <argument>%thanpa_paycenter.acquirerId%</argument>
+            <argument type="service" id="doctrine.orm.entity_manager" />
             <tag name="validator.constraint_validator" alias="thanpa_paycenter.validator_hash_key" />
         </service>
     </services>

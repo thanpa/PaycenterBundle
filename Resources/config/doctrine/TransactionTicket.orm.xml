@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+        http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Thanpa\PaycenterBundle\Entity\TransactionTicket" table="thanpa_transaction_ticket">
+        <id name="id" type="integer">
+            <generator strategy="UUID" />
+        </id>
+        <field name="merchantReference" type="string" length="50" />
+        <field name="transactionTicket" type="string" scale="32" />
+    </entity>
+</doctrine-mapping>

@@ -20,6 +20,11 @@ class TicketIssueRequestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $entityManager = $this->getMockBuilder('\\Doctrine\\ORM\\EntityManager')
+            ->disableOriginalConstructor()
+            ->setMethods(['persist', 'flush'])
+            ->getMock();
+
         $issuer = new TicketIssuer(
             $guzzleMock,
             'int',
@@ -27,21 +32,28 @@ class TicketIssueRequestTest extends \PHPUnit_Framework_TestCase
             'int',
             'string',
             'string',
-            'https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx'
+            'https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx',
+            $entityManager
         );
 
-        $issuer
-            ->setMerchantReference('string')
-            ->setRequestType('string')
-            ->setExpirePreAuth('unsignedByte')
-            ->setAmount('decimal')
-            ->setCurrencyCode('int')
-            ->setInstallments('unsignedByte')
-            ->setBnpl('unsignedByte')
-            ->setParameters('string');
+        $fields = [
+            'Username' => 'string',
+            'Password' => 'b45cffe084dd3d20d928bee85e7b0f21',
+            'MerchantId' => 'int',
+            'PosId' => 'int',
+            'AcquirerId' => 'int',
+            'MerchantReference' => 'string',
+            'RequestType' => 'string',
+            'ExpirePreauth' => 'unsignedByte',
+            'Amount' => 'decimal',
+            'CurrencyCode' => 'int',
+            'Installments' => 'unsignedByte',
+            'Bnpl' => 'unsignedByte',
+            'Parameters' => 'string',
+        ];
 
         $expected = file_get_contents(__DIR__.'/../Fixtures/ticketIssueRequest.xml');
 
-        $this->assertEquals($expected, TicketIssueRequest::getBody($issuer));
+        $this->assertEquals($expected, TicketIssueRequest::getBody($fields));
     }
 }

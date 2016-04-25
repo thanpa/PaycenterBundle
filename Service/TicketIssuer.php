@@ -2,14 +2,17 @@
 
 namespace Thanpa\PaycenterBundle\Service;
 
+use Doctrine\ORM\EntityManager;
 use GuzzleHttp\Client;
+use Thanpa\PaycenterBundle\Entity\TransactionTicket;
+use Thanpa\PaycenterBundle\Interfaces\TicketIssuerInterface;
 use Thanpa\PaycenterBundle\TicketIssue\TicketIssueRequest;
 
 /**
  * Class TicketIssuer
  * @package Thanpa\PaycenterBundle\Service
  */
-class TicketIssuer
+final class TicketIssuer implements TicketIssuerInterface
 {
     /** @var int */
     private $acquirerId;
@@ -56,17 +59,29 @@ class TicketIssuer
     /** @var Client */
     private $client;
 
+    /** @var EntityManager */
+    private $manager;
+
     /**
      * TicketIssuer constructor.
-     * @param Client $client     Guzzle Client
-     * @param int    $acquirerId Acquirer Id
-     * @param int    $merchantId Merchant Id
-     * @param int    $posId      Pos Id
-     * @param string $username   Username
-     * @param string $password   Password
-     * @param string $url        Url
+     * @param Client        $client     Guzzle Client
+     * @param int           $acquirerId Acquirer Id
+     * @param int           $merchantId Merchant Id
+     * @param int           $posId      Pos Id
+     * @param string        $username   Username
+     * @param string        $password   Password
+     * @param string        $url        Url
+     * @param EntityManager $manager    EntityManager
      */
-    public function __construct(Client $client, $acquirerId, $merchantId, $posId, $username, $password, $url)
+    public function __construct(
+        Client $client,
+        $acquirerId,
+        $merchantId,
+        $posId,
+        $username,
+        $password,
+        $url,
+        EntityManager $manager)
     {
         $this->client = $client;
         $this->acquirerId = $acquirerId;
@@ -75,98 +90,7 @@ class TicketIssuer
         $this->username = $username;
         $this->password = $password;
         $this->url = $url;
-    }
-
-    /**
-     * Get Acquirer Id
-     *
-     * @return int
-     */
-    public function getAcquirerId()
-    {
-        return $this->acquirerId;
-    }
-
-    /**
-     * Set AcquirerId
-     *
-     * @param int $acquirerId Acquirer Id
-     * @return TicketIssuer
-     */
-    public function setAcquirerId($acquirerId)
-    {
-        $this->acquirerId = $acquirerId;
-
-        return $this;
-    }
-
-    /**
-     * Get merchant id
-     *
-     * @return int
-     */
-    public function getMerchantId()
-    {
-        return $this->merchantId;
-    }
-
-    /**
-     * Set merchant id
-     *
-     * @param int $merchantId Merchant id
-     * @return TicketIssuer
-     */
-    public function setMerchantId($merchantId)
-    {
-        $this->merchantId = $merchantId;
-
-        return $this;
-    }
-
-    /**
-     * Get Pos id
-     *
-     * @return int
-     */
-    public function getPosId()
-    {
-        return $this->posId;
-    }
-
-    /**
-     * Set Pos Id
-     *
-     * @param int $posId Pos Id
-     * @return TicketIssuer
-     */
-    public function setPosId($posId)
-    {
-        $this->posId = $posId;
-
-        return $this;
-    }
-
-    /**
-     * Get username
-     *
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * Set username
-     *
-     * @param string $username Username
-     * @return TicketIssuer
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
+        $this->manager = $manager;
     }
 
     /**
@@ -177,29 +101,6 @@ class TicketIssuer
     public function getPassword()
     {
         return md5($this->password);
-    }
-
-    /**
-     * Set password
-     *
-     * @param string $password Password
-     * @return TicketIssuer
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get request type
-     *
-     * @return string
-     */
-    public function getRequestType()
-    {
-        return $this->requestType;
     }
 
     /**
@@ -216,15 +117,6 @@ class TicketIssuer
     }
 
     /**
-     * Get currency code
-     * @return int
-     */
-    public function getCurrencyCode()
-    {
-        return $this->currencyCode;
-    }
-
-    /**
      * Set currency code
      *
      * @param int $currencyCode Currency Code
@@ -235,16 +127,6 @@ class TicketIssuer
         $this->currencyCode = $currencyCode;
 
         return $this;
-    }
-
-    /**
-     * Get Merchant Reference
-     *
-     * @return string
-     */
-    public function getMerchantReference()
-    {
-        return $this->merchantReference;
     }
 
     /**
@@ -261,16 +143,6 @@ class TicketIssuer
     }
 
     /**
-     * Get amount
-     *
-     * @return float
-     */
-    public function getAmount()
-    {
-        return $this->amount;
-    }
-
-    /**
      * Set amount
      *
      * @param float $amount Amount
@@ -281,16 +153,6 @@ class TicketIssuer
         $this->amount = $amount;
 
         return $this;
-    }
-
-    /**
-     * Get installments
-     *
-     * @return int
-     */
-    public function getInstallments()
-    {
-        return $this->installments;
     }
 
     /**
@@ -307,16 +169,6 @@ class TicketIssuer
     }
 
     /**
-     * Get Expire Pre Auth
-     *
-     * @return string
-     */
-    public function getExpirePreAuth()
-    {
-        return $this->expirePreAuth;
-    }
-
-    /**
      * Set Expire Pre Auth
      *
      * @param string $expirePreAuth
@@ -327,39 +179,6 @@ class TicketIssuer
         $this->expirePreAuth = $expirePreAuth;
 
         return $this;
-    }
-
-    /**
-     * Get Bnpl
-     *
-     * @return int
-     */
-    public function getBnpl()
-    {
-        return $this->bnpl;
-    }
-
-    /**
-     * Set Bnpl
-     *
-     * @param int $bnpl Bnpl
-     * @return TicketIssuer
-     */
-    public function setBnpl($bnpl)
-    {
-        $this->bnpl = $bnpl;
-
-        return $this;
-    }
-
-    /**
-     * Get parameters
-     *
-     * @return string
-     */
-    public function getParameters()
-    {
-        return $this->parameters;
     }
 
     /**
@@ -379,12 +198,17 @@ class TicketIssuer
      * Makes a request to ticket issuer mechanism to get a transaction ticket
      *
      * @return string Transaction Ticket returned from bank
-     * @throws \Exception If Transaction Ticket system does not return a valid response
+     * @throws \Exception If merchant reference is not specified,
+     *                    or if Transaction Ticket system does not return a valid response
      */
     public function getTicket()
     {
+        if ($this->merchantReference === null) {
+            throw new \Exception('MerchantReference is required for TicketIssuer');
+        }
+
         $response = $this->client->post($this->url, [
-            'body' => TicketIssueRequest::getBody($this),
+            'body' => TicketIssueRequest::getBody($this->getXmlFields()),
             'headers' => ['Content-Type' => 'application/soap+xml; charset=utf-8'],
         ]);
 
@@ -401,6 +225,44 @@ class TicketIssuer
             throw new \Exception(sprintf('TicketIssuer failed: %s', $errorDescription));
         }
 
-        return $xpath->query(sprintf($nodeXPath, 'TranTicket'))->item(0)->nodeValue;
+        $generatedTicket = $xpath->query(sprintf($nodeXPath, 'TranTicket'))->item(0)->nodeValue;
+
+        $this->saveTicket($this->merchantReference, $generatedTicket);
+
+        return $generatedTicket;
+    }
+
+    /**
+     * Saves generated ticket in database
+     *
+     * @param string $merchantReference Merchant reference
+     * @param string $generatedTicket   Generated ticket
+     */
+    private function saveTicket($merchantReference, $generatedTicket)
+    {
+        $transactionTicket = new TransactionTicket($merchantReference, $generatedTicket);
+
+        $em = $this->manager;
+        $em->persist($transactionTicket);
+        $em->flush();
+    }
+
+    private function getXmlFields()
+    {
+        return [
+            'Username' => $this->username,
+            'Password' => $this->getPassword(),
+            'MerchantId' => $this->merchantId,
+            'PosId' => $this->posId,
+            'AcquirerId' => $this->acquirerId,
+            'MerchantReference' => $this->merchantReference,
+            'RequestType' => $this->requestType,
+            'ExpirePreauth' => $this->expirePreAuth,
+            'Amount' => $this->amount,
+            'CurrencyCode' => $this->currencyCode,
+            'Installments' => $this->installments,
+            'Bnpl' => $this->bnpl,
+            'Parameters' => $this->parameters,
+        ];
     }
 }

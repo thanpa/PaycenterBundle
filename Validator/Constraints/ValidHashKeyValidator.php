@@ -2,6 +2,7 @@
 
 namespace Thanpa\PaycenterBundle\Validator\Constraints;
 
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Thanpa\PaycenterBundle\Model\PaymentResponse;
@@ -19,15 +20,20 @@ class ValidHashKeyValidator extends ConstraintValidator
     /** @var int */
     private $acquirerId;
 
+    /** @var EntityManager */
+    private $manager;
+
     /**
      * ValidHashKeyValidator constructor.
-     * @param int $posId      Pos Id
-     * @param int $acquirerId Acquirer Id
+     * @param int           $posId      Pos Id
+     * @param int           $acquirerId Acquirer Id
+     * @param EntityManager $manager    Entity Manager
      */
-    public function __construct($posId, $acquirerId)
+    public function __construct($posId, $acquirerId, EntityManager $manager)
     {
         $this->posId = $posId;
         $this->acquirerId = $acquirerId;
+        $this->manager = $manager;
     }
 
     /**
@@ -35,27 +41,48 @@ class ValidHashKeyValidator extends ConstraintValidator
      *
      * @param PaymentResponse         $protocol   Class to check hash key
      * @param Constraint|ValidHashKey $constraint Constraint
+     * @throws \Exception if transaction ticket not found, or if request hash does not match calculated hash.
      */
     public function validate($protocol, Constraint $constraint)
     {
-        $calculator = new PiraeusHashCalculator();
-        $calculator
-            ->setTransactionTicket('') // @todo create new entity to get MerchantReference, and TransactionTicket
-            ->setPosId($this->posId)
-            ->setAcquirerId($this->acquirerId)
-            ->setMerchantReference($protocol->getMerchantReference())
-            ->setApprovalCode($protocol->getApprovalCode())
-            ->setParameters($protocol->getParameters())
-            ->setResponseCode($protocol->getResponseCode())
-            ->setSupportReferenceId($protocol->getSupportReferenceId())
-            ->setAuthStatus($protocol->getAuthStatus())
-            ->setPackageNo($protocol->getPackageNo())
-            ->setStatusFlag($protocol->getStatusFlag());
+        $transactionTicket = $this->getTransactionTicketByMerchantReference($protocol->getMerchantReference());
+
+        $calculator = new PiraeusHashCalculator(
+            $transactionTicket,
+            $this->posId,
+            $this->acquirerId,
+            $protocol->getMerchantReference(),
+            $protocol->getApprovalCode(),
+            $protocol->getParameters(),
+            $protocol->getResponseCode(),
+            $protocol->getSupportReferenceId(),
+            $protocol->getAuthStatus(),
+            $protocol->getPackageNo(),
+            $protocol->getStatusFlag()
+        );
 
         if ($protocol->getHashKey() !== $calculator->calculate()) {
-            $this->context
-                ->buildViolation($constraint->message)
-                ->addViolation();
+            throw new \Exception($constraint->message);
         }
+    }
+
+    /**
+     * Get transaction ticket by merchant reference
+     *
+     * @param string $merchantReference Merchant Reference
+     * @return \Thanpa\PaycenterBundle\Entity\TransactionTicket
+     * @throws \Exception if transaction ticket is not found
+     */
+    private function getTransactionTicketByMerchantReference($merchantReference)
+    {
+        $transactionTicket = $this->manager
+            ->getRepository('ThanpaPaycenterBundle:TransactionTicket')
+            ->findOneBy(['merchantReference' => $merchantReference]);
+
+        if ($transactionTicket === null) {
+            throw new \Exception('TransactionTicket not found in database for this request.');
+        }
+
+        return $transactionTicket;
     }
 }
