@@ -154,8 +154,8 @@ payment_fail:
 
 How to use this bundle:
 -----------------------
-In your application, when there's a new order created, you should have a unique identifier used as order reference.
-You can also use order id if you don't have an order reference (usually a 5 characters string).
+In your application, when there's a new order created, you should have a unique identifier used as order reference (usually a 5 characters string).
+You can also use order id if you don't have an order reference.
 
 ### Step 1: Save order object in database
 
