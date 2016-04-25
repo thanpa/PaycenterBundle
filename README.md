@@ -97,12 +97,12 @@ $ app/console doctrine:migrations:migrate
 ```
 
 ## Parameters:
-* thanpa_paycenter.acquirerId: your Acquirer Id (provided by bank)
-* thanpa_paycenter.merchantId: Your Merchant Id (provided by bank)
-* thanpa_paycenter.posId: Your Pos Id (provided by bank)
-* thanpa_paycenter.username: Your API username (provided by bank)
-* thanpa_paycenter.password: Your API password (provided by bank)
-* thanpa_paycenter.param_back_link: use ```""``` for no parameters, or add your parameters: ```p1=v1&p2=v2```. Make sure not to include ? as first character.
+* ```thanpa_paycenter.acquirerId```: your Acquirer Id (provided by bank)
+* ```thanpa_paycenter.merchantId```: Your Merchant Id (provided by bank)
+* ```thanpa_paycenter.posId```: Your Pos Id (provided by bank)
+* ```thanpa_paycenter.username```: Your API username (provided by bank)
+* ```thanpa_paycenter.password```: Your API password (provided by bank)
+* ```thanpa_paycenter.param_back_link```: use ```""``` for no parameters, or add your parameters: ```p1=v1&p2=v2```. Make sure not to include ? as first character.
 
 Payment Success / Failure Pages:
 --------------------------------
