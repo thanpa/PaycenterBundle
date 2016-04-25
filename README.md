@@ -102,6 +102,54 @@ Bank supports following ```languageCode``` values:
 ## Parameters:
 * thanpa_paycenter.param_back_link: use "" for no parameters, or add your parameters: ```p1=v1&p2=v2```. Make sure not to include ? as first character.
 
+Payment Success / Failure Pages:
+--------------------------------
+
+*Please note you need to inform your bank of your payment success/fail urls.*
+
+* Create a new controller in your application named PaymentController.php and extend ```Thanpa\PaycenterBundle\Controller\AbstractPaymentResponseController```.
+* You need to implement methods defined in ```PaymentResponseInterface```.
+
+Your code should look like this:
+
+## Payment Success Page
+```php
+    public function successAction()
+    {
+        $paymentResponse = $this->convertPostToPaymentResponse();
+
+        // your logic here: set order as 'paid'
+    }
+```
+
+## Payment Failed Page
+```php
+    public function failAction()
+    {
+        $paymentResponse = $this->convertPostToPaymentResponse();
+
+        // your logic here: set order as 'paid'
+    }
+```
+
+```Thanpa\PaycenterBundle\Model\PaymentResponse``` class has access methods you can use to get response information.
+
+**NOTE:** bank requires you to persist the response in your system for future reference (not implemented in this Bundle).
+
+Add the following to your ```app/config/routing.yml``` (adjust the paths, and controller path to match your application):
+
+```
+payment_success:
+    path:      /order/payment/success
+    defaults:  { _controller: AppBundle:PaymentController:success }
+    methods:   [GET]
+
+payment_fail:
+    path:      /order/payment/fail
+    defaults:  { _controller: AppBundle:PaymentController:fail }
+    methods:   [GET]
+```
+
 How to run tests
 ----------------
 
