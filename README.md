@@ -51,7 +51,8 @@ class AppKernel extends Kernel
 Step 3: Configuration
 -------------
 
-App following to your ```app/config/parameters.yml``` and replace placeholder values to the ones provided by your bank.
+* Add following to your ```app/config/parameters.yml.dist``` (without replacing placeholders)
+* Add following to your ```app/config/parameters.yml```, replace placeholder values to the ones provided by your bank.
 
 ```
     # paycenter parameters
@@ -66,6 +67,7 @@ App following to your ```app/config/parameters.yml``` and replace placeholder va
 Add following code to your ```app/config/routing.yml```:
 
 ```
+# app/config/routing.yml
 redirectToBank:
     path:      /order/redirectToBank/{languageCode}/{merchantReference}
     defaults:  { _controller: ThanpaPaycenterBundle:RedirectionPay:redirectToBank, languageCode: 'el-GR', merchantReference: '' }
