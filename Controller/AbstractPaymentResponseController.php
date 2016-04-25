@@ -5,23 +5,14 @@ namespace Thanpa\PaycenterBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Thanpa\PaycenterBundle\Form\Type\PaymentResponseType;
+use Thanpa\PaycenterBundle\Interfaces\PaymentResponseInterface;
 
 /**
- * Class PaymentResponseController
+ * Class AbstractPaymentResponseController
  * @package Thanpa\PaycenterBundle\Controller
  */
-class PaymentResponseController extends Controller
+abstract class AbstractPaymentResponseController extends Controller implements PaymentResponseInterface
 {
-    public function successAction()
-    {
-        // @todo
-    }
-
-    public function failAction()
-    {
-        // @todo
-    }
-
     /**
      * Converts POST'ed data to PaymentResponse object.
      *
