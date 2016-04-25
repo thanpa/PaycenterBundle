@@ -118,7 +118,7 @@ Your code should look like this:
     {
         $paymentResponse = $this->convertPostToPaymentResponse();
 
-        // your logic here: set order as 'paid'
+        // your logic here: set order as 'paid', notify customer etc
     }
 ```
 
@@ -128,13 +128,15 @@ Your code should look like this:
     {
         $paymentResponse = $this->convertPostToPaymentResponse();
 
-        // your logic here: set order as 'paid'
+        // your logic here: set order as 'payment failed', email customer etc
     }
 ```
 
 ```Thanpa\PaycenterBundle\Model\PaymentResponse``` class has access methods you can use to get response information.
 
-**NOTE:** bank requires you to persist the response in your system for future reference (not implemented in this Bundle).
+**NOTE:**
+* bank requires you to persist the response in your system for future reference (not implemented in this Bundle).
+* Make sure to call ```convertPostToPaymentResponse()``` because it also validates the hash to ensure this is a valid response from the bank.
 
 Add the following to your ```app/config/routing.yml``` (adjust the paths, and controller path to match your application):
 
@@ -149,6 +151,54 @@ payment_fail:
     defaults:  { _controller: AppBundle:PaymentController:fail }
     methods:   [GET]
 ```
+
+How to use this bundle:
+-----------------------
+In your application, when there's a new order created, you should have a unique identifier used as order reference.
+You can also use order id if you don't have an order reference (usually a 5 characters string).
+
+### Step 1: Save order object in database
+
+When your order is created, it should be saved as "payment pending".
+
+### Step 2: Get a new ticket from bank's API
+
+This is when you should call the ticket mechanism.
+
+```php
+
+// ...
+
+// get ticket issuer service
+$issuer = $this->get('thanpa_paycenter.ticket_issuer');
+$issuer->setMerchantReference($orderReference); // your unique order identifier
+
+$ticket = $issuer->getTicket();
+
+```
+
+If request to bank's API succeeded you should now have a new ticket in ```$ticket```, and saved in your database.
+
+### Step 3: Redirect user to secure payment environment
+
+In your controller, redirect user to ```redirectToBank``` route (as defined previously):
+
+```php
+        return $this->redirect($this->generateUrl('redirectToBank', [
+            'languageCode' => 'el-GR',
+            'merchantReference' => $orderReference, // or your unique order identifier
+        ]));
+```
+
+This should show a form with hidden fields and will be submitted automatically (requires user to have Javascript enabled).
+After the form is submitted, user is redirected to bank's secure environment to complete the payment.
+
+### Step 4: User is redirected to your site after payment is completed successfully/failed/cancelled
+* If user does not complete payment and clicks "Cancel" he/she is redirected to the specified url you provided to bank (this is not configurable in the bundle).
+* If payment is successfully completed, user is redirected to your ```payment_success``` route.
+* If payment has failed, user is redirected to your ```payment_fail``` route.
+
+**NOTE:** I strongly suggest you read bank's API manual to fully understand how it works.
 
 How to run tests
 ----------------
