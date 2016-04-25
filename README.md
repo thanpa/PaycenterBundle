@@ -105,9 +105,9 @@ Bank supports following ```languageCode``` values:
 Payment Success / Failure Pages:
 --------------------------------
 
-*Please note you need to inform your bank of your payment success/fail urls.*
+*Please note you need to inform your bank of your payment success/fail urls. Let them know you'd like API responses to be ```POST```ed back to your site.*
 
-* Create a new controller in your application named PaymentController.php and extend ```Thanpa\PaycenterBundle\Controller\AbstractPaymentResponseController```.
+* Create a new controller in your application named ```PaymentController.php``` and extend ```Thanpa\PaycenterBundle\Controller\AbstractPaymentResponseController```.
 * You need to implement methods defined in ```PaymentResponseInterface```.
 
 Your code should look like this:
@@ -144,12 +144,12 @@ Add the following to your ```app/config/routing.yml``` (adjust the paths, and co
 payment_success:
     path:      /order/payment/success
     defaults:  { _controller: AppBundle:PaymentController:success }
-    methods:   [GET]
+    methods:   [POST]
 
 payment_fail:
     path:      /order/payment/fail
     defaults:  { _controller: AppBundle:PaymentController:fail }
-    methods:   [GET]
+    methods:   [POST]
 ```
 
 How to use this bundle:
