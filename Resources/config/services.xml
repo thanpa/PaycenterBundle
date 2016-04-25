@@ -25,6 +25,12 @@
         <service id="thanpa_paycenter.guzzle_client" class="GuzzleHttp\Client" />
 
         <service id="thanpa_paycenter.redirection_pay_controller" class="%thanpa_paycenter.redirection_pay_controller%" />
+
+        <service id="thanpa_paycenter.validator_hash_key" class="Thanpa\PaycenterBundle\Validator\Constraints\ValidHashKeyValidator">
+            <argument>%thanpa_paycenter.posId%</argument>
+            <argument>%thanpa_paycenter.acquirerId%</argument>
+            <tag name="validator.constraint_validator" alias="thanpa_paycenter.validator_hash_key" />
+        </service>
     </services>
 
 </container>
