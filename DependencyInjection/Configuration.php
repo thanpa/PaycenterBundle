@@ -18,11 +18,36 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('thanpa_paycenter');
+        $rootNode = $treeBuilder->root('thanpa_paycenter');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->scalarNode('acquirerId')
+                    ->info('Your Acquirer Id provided by bank.')
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('merchantId')
+                    ->info('Your Merchant Id provided by bank.')
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('posId')
+                    ->info('Your Pos Id provided by bank.')
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('username')
+                    ->info('Your API Username provided by bank.')
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('password')
+                    ->info('Your API Password provided by bank.')
+                    ->cannotBeEmpty()
+                ->end()
+                ->scalarNode('param_back_link')
+                    ->info('Its contents will be used as a query string in the URL returned to the user when the "Cancel" button is pressed.')
+                    ->defaultNull()
+                ->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }
