@@ -3,8 +3,6 @@ Piraeus bank paycenter bundle
 
 [![Build Status](https://travis-ci.org/george-thanpa/PaycenterBundle.svg?branch=master)](https://travis-ci.org/george-thanpa/PaycenterBundle)
 
-*NOTE:* Please note this bundle is under heavy development.
-
 Installation
 ============
 
@@ -50,9 +48,42 @@ class AppKernel extends Kernel
 }
 ```
 
-Step 3: Update database
+Step 3: Configuration
+-------------
+
+* Add following to your ```app/config/parameters.yml.dist``` (without replacing placeholders)
+* Add following to your ```app/config/parameters.yml```, replace placeholder values to the ones provided by your bank.
+
+```
+    # paycenter parameters
+    thanpa_paycenter.acquirerId: placeholder-value-change-me
+    thanpa_paycenter.merchantId: placeholder-value-change-me
+    thanpa_paycenter.posId: placeholder-value-change-me
+    thanpa_paycenter.username: placeholder-value-change-me
+    thanpa_paycenter.password: placeholder-value-change-me
+    thanpa_paycenter.param_back_link: "" # its contents used as a query string in the URL returned to the user when the "Cancel" button is pressed.
+```
+
+Add following code to your ```app/config/routing.yml```:
+
+```
+# app/config/routing.yml
+redirectToBank:
+    path:      /order/redirectToBank/{languageCode}/{merchantReference}
+    defaults:  { _controller: ThanpaPaycenterBundle:RedirectionPay:redirectToBank, languageCode: 'el-GR', merchantReference: '' }
+    requirements:
+        languageCode:  el-GR|en-US|ru-RU|de-DE
+```
+
+Bank supports following ```languageCode``` values:
+* el-GR
+* en-US
+* ru-RU
+* de-DE
+
+Step 4: Update database
 -----------------------
-This bundle supports Doctrine, please run the following command:
+This bundle supports [Doctrine](http://symfony.com/doc/current/book/doctrine.html), please run the following command:
 ```
 # bin/console for Symfony3
 $ app/console doctrine:schema:update --force
@@ -65,42 +96,13 @@ $ app/console doctrine:migrations:diff
 $ app/console doctrine:migrations:migrate
 ```
 
-Configuration
--------------
-
-App following to your ```app/config/parameters.yml``` and replace placeholder values to the ones provided by your bank.
-
-```
-    # paycenter parameters
-    thanpa_paycenter.acquirerId: placeholder-value-change-me
-    thanpa_paycenter.merchantId: placeholder-value-change-me
-    thanpa_paycenter.posId: placeholder-value-change-me
-    thanpa_paycenter.username: placeholder-value-change-me
-    thanpa_paycenter.password: placeholder-value-change-me
-    thanpa_paycenter.param_back_link: "" # its contents used as a query string in the URL returned to the user when the "Cancel" button is pressed.
-
-```
-
-Add following code to your ```app/config/routing.yml```:
-
-```
-redirectToBank:
-    path:      /order/redirectToBank/{languageCode}/{merchantReference}
-    defaults:  { _controller: ThanpaPaycenterBundle:RedirectionPay:redirectToBank, languageCode: 'el-GR', merchantReference: '' }
-    requirements:
-        languageCode:  el-GR|en-US|ru-RU|de-DE
-```
-
-**NOTE:** Redirect to bank requires javascript to be enabled on client's browser.
-
-Bank supports following ```languageCode``` values:
-* el-GR
-* en-US
-* ru-RU
-* de-DE
-
 ## Parameters:
-* thanpa_paycenter.param_back_link: use "" for no parameters, or add your parameters: ```p1=v1&p2=v2```. Make sure not to include ? as first character.
+* ```thanpa_paycenter.acquirerId```: your Acquirer Id (provided by bank)
+* ```thanpa_paycenter.merchantId```: Your Merchant Id (provided by bank)
+* ```thanpa_paycenter.posId```: Your Pos Id (provided by bank)
+* ```thanpa_paycenter.username```: Your API username (provided by bank)
+* ```thanpa_paycenter.password```: Your API password (provided by bank)
+* ```thanpa_paycenter.param_back_link```: use ```""``` for no parameters, or add your parameters: ```p1=v1&p2=v2```. Make sure not to include ? as first character.
 
 Payment Success / Failure Pages:
 --------------------------------
