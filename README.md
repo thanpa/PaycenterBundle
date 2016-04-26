@@ -50,6 +50,18 @@ class AppKernel extends Kernel
 
 Step 3: Configuration
 -------------
+* Add following to your ```app/config/parameters.yml.dist``` without changing its values
+* Add following to your ```app/config/parameters.yml```, replace placeholder values to bank provided values.
+
+```
+    thanpa_paycenter.acquirerId: placeholder-value-change-me
+    thanpa_paycenter.merchantId: placeholder-value-change-me
+    thanpa_paycenter.posId: placeholder-value-change-me
+    thanpa_paycenter.username: placeholder-value-change-me
+    thanpa_paycenter.password: placeholder-value-change-me
+    thanpa_paycenter.param_back_link: "" # its contents used as a query string in the URL returned to the user when the "Cancel" button is pressed.
+```
+
 Add following code to your ```app/config/routing.yml```:
 
 ```
