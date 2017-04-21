@@ -13,7 +13,7 @@ Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
 ```bash
-$ composer require thanpa/paycenter-bundle "dev-master"
+$ composer require thanpa/paycenter-bundle "1.1"
 ```
 
 This command requires you to have Composer installed globally, as explained
@@ -67,17 +67,9 @@ Add following code to your ```app/config/routing.yml```:
 ```
 # app/config/routing.yml
 redirectToBank:
-    path:      /order/redirectToBank/{languageCode}/{merchantReference}
-    defaults:  { _controller: ThanpaPaycenterBundle:RedirectionPay:redirectToBank, languageCode: 'el-GR', merchantReference: '' }
-    requirements:
-        languageCode:  el-GR|en-US|ru-RU|de-DE
+    path:      /order/redirectToBank
+    defaults:  { _controller: ThanpaPaycenterBundle:RedirectionPay:redirectToBank }
 ```
-
-Bank supports following ```languageCode``` values:
-* el-GR
-* en-US
-* ru-RU
-* de-DE
 
 Step 4: Update database
 -----------------------
@@ -107,7 +99,7 @@ Payment Success / Failure Pages:
 
 *Please note you need to inform your bank of your payment success/fail urls. Let them know you'd like API responses to be ```POST```ed back to your site.*
 
-* Create a new controller in your application named ```PaymentController.php``` and extend ```Thanpa\PaycenterBundle\Controller\AbstractPaymentResponseController```.
+* Create a new controller in your application named ```PaymentController.php```.
 * You need to implement methods defined in ```PaymentResponseInterface```.
 
 Your code should look like this:
@@ -116,9 +108,13 @@ Your code should look like this:
 ```php
     public function successAction()
     {
-        $paymentResponse = $this->convertPostToPaymentResponse();
-
+        $service = $this->get('thanpa_paycenter.payment_response');
+        $paymentResponse = $service->extract($request);
+        
         // your logic here: set order as 'paid', notify customer etc
+        
+        $this->addFlash('success', $service->getDisplayMessage($paymentResponse));
+        // redirect where you need to redirect
     }
 ```
 
@@ -126,17 +122,35 @@ Your code should look like this:
 ```php
     public function failAction()
     {
-        $paymentResponse = $this->convertPostToPaymentResponse();
+        $service = $this->get('thanpa_paycenter.payment_response');
+        $paymentResponse = $service->extract($request);
 
         // your logic here: set order as 'payment failed', email customer etc
+        
+        $this->addFlash('error', $service->getDisplayMessage($paymentResponse));
+        // redirect where you need to redirect
     }
 ```
 
-```Thanpa\PaycenterBundle\Model\PaymentResponse``` class has access methods you can use to get response information.
+## Back Link Page
+```php
+    public function backlinkAction()
+    {
+        $service = $this->get('thanpa_paycenter.payment_response');
+        $paymentResponse = $service->extract($request);
+
+        // your logic here: actually probably nothing
+                
+        $this->addFlash('warning', $this->get('translator')->trans('You clicked cancel!'));
+        // redirect where you need to redirect
+    }
+```
+
+```Thanpa\PaycenterBundle\Entity\PaymentResponse``` class has access methods you can use to get response information.
 
 **NOTE:**
-* bank requires you to persist the response in your system for future reference (not implemented in this Bundle).
-* Make sure to call ```convertPostToPaymentResponse()``` because it also validates the hash to ensure this is a valid response from the bank.
+* bank requires you to persist the response in your system for future reference (saved in table thanpa_payment_response)
+* for success calls the extract method of the payment_response service will also calculate the hash to ensure this is a valid response from the bank.
 
 Add the following to your ```app/config/routing.yml``` (adjust the paths, and controller path to match your application):
 
@@ -149,6 +163,11 @@ payment_success:
 payment_fail:
     path:      /order/payment/fail
     defaults:  { _controller: AppBundle:PaymentController:fail }
+    methods:   [POST]
+    
+payment_backlink:
+    path:      /order/payment/backlink
+    defaults:  { _controller: AppBundle:PaymentController:backlink }
     methods:   [POST]
 ```
 
@@ -184,10 +203,15 @@ If request to bank's API succeeded you should now have a new ticket in ```$ticke
 In your controller, redirect user to ```redirectToBank``` route (as defined previously):
 
 ```php
-        return $this->redirect($this->generateUrl('redirectToBank', [
-            'languageCode' => 'el-GR',
-            'merchantReference' => $orderReference, // or your unique order identifier
-        ]));
+        return $this->redirect(
+            $this->generateUrl(
+                'redirectToBank', 
+                [
+                    'languageCode' => 'el-GR',
+                    'merchantReference' => $orderReference, // or your unique order/payment identifier 
+                ]
+            )
+        );
 ```
 
 This should show a form with hidden fields and will be submitted automatically (requires user to have Javascript enabled).
@@ -197,6 +221,7 @@ After the form is submitted, user is redirected to bank's secure environment to 
 * If user does not complete payment and clicks "Cancel" he/she is redirected to the specified url you provided to bank (this is not configurable in the bundle).
 * If payment is successfully completed, user is redirected to your ```payment_success``` route.
 * If payment has failed, user is redirected to your ```payment_fail``` route.
+* If user clicked "cancel" then user is redirected to your ```payment_backlink``` route.
 
 **NOTE:** I strongly suggest you read bank's API manual to fully understand how it works.
 
