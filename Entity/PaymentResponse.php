@@ -1,17 +1,23 @@
 <?php
 
-namespace Thanpa\PaycenterBundle\Model;
+namespace Thanpa\PaycenterBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Thanpa\PaycenterBundle\Validator\Constraints\ValidHashKey;
 
 /**
  * Class PaymentResponse
- * @package Thanpa\PaycenterBundle\Model
+ * @package Thanpa\PaycenterBundle\Entity
  * @ValidHashKey()
  */
 class PaymentResponse
 {
+
+    /**
+     * @var int
+     */
+    private $id;
+
     /**
      * @var int
      *
@@ -43,7 +49,6 @@ class PaymentResponse
      *
      * The description corresponding to the "ResultCode" parameter value.
      *
-     * @Assert\NotBlank()
      * @Assert\Length(max="1024")
      */
     private $resultDescription;
@@ -70,7 +75,6 @@ class PaymentResponse
      * Attention! The return value 11 means that a successful transaction has already been performed
      * with the request "MerchantReference"; therefore the transaction has not been executed.
      *
-     * @Assert\NotBlank()
      * @Assert\Length(max="2")
      */
     private $responseCode;
@@ -80,7 +84,6 @@ class PaymentResponse
      *
      * The description corresponding to th "ResponseCode" parameter value.
      *
-     * @Assert\NotBlank()
      * @Assert\Length(max="120")
      */
     private $responseDescription;

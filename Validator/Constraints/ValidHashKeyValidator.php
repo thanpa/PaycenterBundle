@@ -5,7 +5,7 @@ namespace Thanpa\PaycenterBundle\Validator\Constraints;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Thanpa\PaycenterBundle\Model\PaymentResponse;
+use Thanpa\PaycenterBundle\Entity\PaymentResponse;
 use Thanpa\PaycenterBundle\Service\PiraeusHashCalculator;
 
 /**
@@ -45,10 +45,22 @@ class ValidHashKeyValidator extends ConstraintValidator
      */
     public function validate($protocol, Constraint $constraint)
     {
-        $transactionTicket = $this->getTransactionTicketByMerchantReference($protocol->getMerchantReference());
+        $noHashResponseCodes = ['05', '12', '51', '34', '43', '54', '62', '92'];
+        if (in_array($protocol->getResponseCode(), $noHashResponseCodes)) {
+            return;
+        }
+
+        $transactionTicket = $this->manager
+            ->getRepository('ThanpaPaycenterBundle:TransactionTicket')
+            ->findOneBy(['merchantReference' => $protocol->getMerchantReference()]);
+
+        if ($transactionTicket === null) {
+            $this->context->buildViolation($constraint->message)->addViolation();
+            return;
+        }
 
         $calculator = new PiraeusHashCalculator(
-            $transactionTicket,
+            $transactionTicket->getTransactionTicket(),
             $this->posId,
             $this->acquirerId,
             $protocol->getMerchantReference(),
@@ -62,27 +74,7 @@ class ValidHashKeyValidator extends ConstraintValidator
         );
 
         if ($protocol->getHashKey() !== $calculator->calculate()) {
-            throw new \Exception($constraint->message);
+            $this->context->buildViolation($constraint->message)->addViolation();
         }
-    }
-
-    /**
-     * Get transaction ticket by merchant reference
-     *
-     * @param string $merchantReference Merchant Reference
-     * @return string Transaction Ticket
-     * @throws \Exception if transaction ticket is not found
-     */
-    private function getTransactionTicketByMerchantReference($merchantReference)
-    {
-        $result = $this->manager
-            ->getRepository('ThanpaPaycenterBundle:TransactionTicket')
-            ->findOneBy(['merchantReference' => $merchantReference]);
-
-        if ($result === null) {
-            throw new \Exception('TransactionTicket not found in database for this request.');
-        }
-
-        return $result->getTransactionTicket();
     }
 }

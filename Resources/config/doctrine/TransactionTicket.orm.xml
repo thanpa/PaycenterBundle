@@ -6,7 +6,7 @@
 
     <entity name="Thanpa\PaycenterBundle\Entity\TransactionTicket" table="thanpa_transaction_ticket">
         <id name="id" type="integer">
-            <generator strategy="UUID" />
+            <generator strategy="AUTO" />
         </id>
         <field name="merchantReference" type="string" length="50" />
         <field name="transactionTicket" type="string" scale="32" />

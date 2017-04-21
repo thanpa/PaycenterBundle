@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="thanpa_paycenter.ticket_issuer_url">https://paycenter.piraeusbank.gr/services/tickets/issuer.asmx</parameter>
         <parameter key="thanpa_paycenter.ticket_issuer_class">Thanpa\PaycenterBundle\Service\TicketIssuer</parameter>
+        <parameter key="thanpa_paycenter.payment_response_class">Thanpa\PaycenterBundle\Service\PaymentResponse</parameter>
         <parameter key="thanpa_paycenter.redirection_pay_controller">Thanpa\PaycenterBundle\Controller\RedirectionPayController</parameter>
         <parameter key="thanpa_paycenter.redirection_pay_url">https://paycenter.piraeusbank.gr/redirection/pay.aspx</parameter>
         <parameter key="thanpa_paycenter.hash_key_validator_class">Thanpa\PaycenterBundle\Validator\Constraints\ValidHashKeyValidator</parameter>
@@ -33,6 +34,11 @@
             <argument>%thanpa_paycenter.acquirerId%</argument>
             <argument type="service" id="doctrine.orm.entity_manager" />
             <tag name="validator.constraint_validator" alias="thanpa_paycenter.validator_hash_key" />
+        </service>
+
+        <service id="thanpa_paycenter.payment_response" class="%thanpa_paycenter.payment_response_class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="validator" />
         </service>
     </services>
 

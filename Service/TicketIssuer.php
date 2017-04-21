@@ -30,7 +30,7 @@ final class TicketIssuer implements TicketIssuerInterface
     private $password;
 
     /** @var string */
-    private $requestType = 02;
+    private $requestType = '02';
 
     /** @var int */
     private $currencyCode = 978;
@@ -206,6 +206,9 @@ final class TicketIssuer implements TicketIssuerInterface
         if ($this->merchantReference === null) {
             throw new \Exception('MerchantReference is required for TicketIssuer');
         }
+        if (!is_numeric($this->amount) || $this->amount <= 0) {
+            throw new \Exception('Amount should be a number higher than zero');
+        }
 
         $response = $this->client->post($this->url, [
             'body' => TicketIssueRequest::getBody($this->getXmlFields()),
@@ -240,13 +243,24 @@ final class TicketIssuer implements TicketIssuerInterface
      */
     private function saveTicket($merchantReference, $generatedTicket)
     {
-        $transactionTicket = new TransactionTicket($merchantReference, $generatedTicket);
+        $existing = $this->manager
+            ->getRepository('ThanpaPaycenterBundle:TransactionTicket')
+            ->findOneBy(['merchantReference' => $merchantReference]);
 
-        $em = $this->manager;
-        $em->persist($transactionTicket);
-        $em->flush();
+        if ($existing !== null) {
+            $this->manager->remove($existing);
+        }
+
+        $transactionTicket = new TransactionTicket($merchantReference, $generatedTicket);
+        $this->manager->persist($transactionTicket);
+        $this->manager->flush();
     }
 
+    /**
+     * Returns an array with all XML fields that should be sent for the ticket
+     *
+     * @return array
+     */
     private function getXmlFields()
     {
         return [

@@ -10,6 +10,9 @@
 # PhpStorm
 /.idea/
 
+# Mac
+/.DS_Store
+
 build/
 vendor/
 composer.lock

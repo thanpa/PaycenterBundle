@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+        http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Thanpa\PaycenterBundle\Entity\PaymentResponse" table="thanpa_payment_response">
+        <id name="id" type="integer">
+            <generator strategy="AUTO" />
+        </id>
+        <field name="supportReferenceId" type="integer" />
+        <field name="resultCode" type="string" length="5" />
+        <field name="resultDescription" type="text" />
+        <field name="statusFlag" type="string" length="12" />
+        <field name="responseCode" type="string" length="2" />
+        <field name="responseDescription" type="string" length="120" />
+        <field name="languageCode" type="string" length="5" />
+        <field name="merchantReference" type="string" length="50" />
+        <field name="transactionDateTime" type="string" length="19" />
+        <field name="transactionId" type="integer" />
+        <field name="cardType" type="integer" />
+        <field name="packageNo" type="integer" />
+        <field name="approvalCode" type="string" length="6" />
+        <field name="retrievalRef" type="string" length="12" />
+        <field name="authStatus" type="string" length="2" />
+        <field name="parameters" type="text" />
+        <field name="hashKey" type="string" length="64" />
+    </entity>
+</doctrine-mapping>

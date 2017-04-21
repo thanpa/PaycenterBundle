@@ -4,13 +4,20 @@
     <title>Redirect to secure environment</title>
 </head>
 <body>
-{{ form_start(form, {'attr': {'id': 'form'}}) }}
-<input type="submit" name="form" value="Submit" />
-{{ form_end(form) }}
 
-<script type="text/javascript">
-    document.getElementById("form").submit();
-</script>
+    <form id="redirect-form" name="redirect-to-secure-environment" method="post" action="{{ redirectionPayUrl }}">
+        <input type="hidden" id="AcquirerId" name="AcquirerId" value="{{ acquirerId }}" />
+        <input type="hidden" id="MerchantId" name="MerchantId" value="{{ merchantId }}" />
+        <input type="hidden" id="PosId" name="PosId" value="{{ posId }}" />
+        <input type="hidden" id="User" name="User" value="{{ username }}" />
+        <input type="hidden" id="LanguageCode" name="LanguageCode" value="{{ languageCode }}" />
+        <input type="hidden" id="MerchantReference" name="MerchantReference" value="{{ merchantReference }}" />
+        <input type="hidden" id="ParamBackLink" name="ParamBackLink" value="{{ paramBackLink }}" />
+    </form>
+
+    <script type="text/javascript">
+        document.getElementById('redirect-form').submit();
+    </script>
 
 </body>
 </html>
