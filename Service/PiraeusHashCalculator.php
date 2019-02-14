@@ -91,7 +91,7 @@ final class PiraeusHashCalculator implements HashCalculatorInterface
     public function calculate()
     {
         $concatValues = sprintf(
-            '%s%s%s%s%s%s%s%s%s%s%s',
+            '%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s',
             $this->transactionTicket,
             $this->posId,
             $this->acquirerId,
@@ -105,6 +105,6 @@ final class PiraeusHashCalculator implements HashCalculatorInterface
             $this->statusFlag
         );
 
-        return strtoupper(hash('sha256', $concatValues, false));
+        return hash_hmac('sha256', $concatValues, $this->transactionTicket, false);
     }
 }
