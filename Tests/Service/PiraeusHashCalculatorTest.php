@@ -26,7 +26,7 @@ class PiraeusHashCalculatorTest extends \PHPUnit_Framework_TestCase
             'Success'
         );
 
-        $expected = 'CC60B1B8445EA0B1759ECFB42E7DE2BF8A280247889F8BF38842045298C57556';
+        $expected = '551f158e669965f30bcfa65e558fd4aabb191d394de39be2adfab416575102d7';
 
         $this->assertEquals($expected, $class->calculate());
     }
